@@ -13,7 +13,7 @@ The following code can be found in the ```pcl_callback()``` function of the perc
 
 Before starting filtering, it was important to see the kind of data I was working with. The ```pcl_callback()``` function takes in a ROS msg and converts it to point cloud data, so I took advantage of this by visualizing the cloud as I worked my way down.
 
-![1](./images/unfiltered.png)
+![1](./images/unfiltered.PNG)
 
 Looking at the the original point cloud using pcl viewer, there were a little under 640,000 points and quite a bit of noise. 
 
@@ -41,7 +41,7 @@ vox.set_leaf_size(LEAF_SIZE,LEAF_SIZE,LEAF_SIZE)
 ```
 This is still pretty small, but later I would be using a predictive model to identify the objects, and this size allowed their point clouds to retain excellent resolution while cutting down the total number of points in the scene to a little above 290,000. This was the resultant point cloud:
 
-![2](./images/voxel-and-noise.png)
+![2](./images/voxel-and-noise.PNG)
 
 
 
@@ -59,7 +59,7 @@ passthrough.set_filter_limits(axis_min, axis_max)
 ```
 By creating 3 passthrough filters (one for each of the x, y, and z directions), I was able to wrap the essential point cloud data in a small box around the table, while excluding everything else.
 
-![3](./images/passthrough.png)
+![3](./images/passthrough.PNG)
 
 
 
@@ -82,7 +82,7 @@ inliers, coefficients = seg.segment()
 RANSAC is an algorithm that can be used to identify simple shapes, so by taking advantage of the fact that the table is a plane, I was able to identify all the points that made up the table as inliers.
 
     cloud_table = cloud_filtered.extract(inliers, negative=False)
-![4](./images/cloud-table.png)
+![4](./images/cloud-table.PNG)
 
 
 
@@ -90,7 +90,7 @@ This meant that the only group left was the outliers (aka objects!)
 
 ```cloud_objects = cloud_filtered.extract(inliers, negative=True)```
 
-![5](./images/cloud-objects.png)
+![5](./images/cloud-objects.PNG)
 
 
 
@@ -141,7 +141,7 @@ for j, indices in enumerate(cluster_indices):
 
 Using this color coding, I was able to ensure that the objects were correctly clustered. Now, I just needed to have them identified and labelled!
 
-![6](./images/cluster.png)
+![6](./images/cluster.PNG)
 
 
 
@@ -230,9 +230,9 @@ kf = cross_validation.KFold(len(X_train),
                             random_state=1)
 ```
 
-![8](./images/linear-confusion.png)
+![8](./images/linear-confusion.PNG)
 
-![9](./images/linear-model-accuracy.png)
+![9](./images/linear-model-accuracy.PNG)
 
 
 
@@ -249,9 +249,9 @@ kf = cross_validation.KFold(len(X_train),
                             random_state=1)
 ``````
 
-![10](./images/tree-confusion.png)
+![10](./images/tree-confusion.PNG)
 
-![11](./images/tree-model-accuracy.png)
+![11](./images/tree-model-accuracy.PNG)
 
 
 
@@ -287,11 +287,11 @@ With the models prepared, I went back to  ```pcl_callback()``` to use the models
 
 With object recognition fully implemented, the pr2 was able to successfully identify all of the objects in each world!
 
-![12](./images/world1.png)
+![12](./images/world1.PNG)
 
-![13](./images/world2.png)
+![13](./images/world2.PNG)
 
-![14](./images/world3.png)
+![14](./images/world3.PNG)
 
 
 
@@ -299,11 +299,11 @@ However, one model did slightly outperform the other, despite having a lower tra
 
 **SVM**
 
-![15](./images/linear-actual-accuracy.png)
+![15](./images/linear-actual-accuracy.PNG)
 
 **Tree Classifier**
 
-![16](./images/tree-actual-accuracy.png)
+![16](./images/tree-actual-accuracy.PNG)
 
 
 
@@ -364,7 +364,7 @@ for i in range(0, len(object_list_param)):
 
 Afterwards, I was able to store the needed information into a dictionary that would convert the information to a YAML file:
 
-![17](./images/yaml.png)
+![17](./images/yaml.PNG)
 
 
 
